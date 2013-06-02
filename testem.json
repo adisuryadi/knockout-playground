@@ -1,0 +1,14 @@
+{
+  "framework": "jasmine",
+  "src_files": [
+    "js/vendor/knockout.js",
+    "js/vendor/knockout.validation.js",
+    "js/vendor/knockout.mapping.js",
+
+    "spec/javascripts/vendor/sinon.js",
+    "spec/javascripts/vendor/jasmine-sinon.js",
+
+    "js/*.js",
+    "spec/javascripts/*spec.js"
+  ]
+}
