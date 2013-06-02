@@ -1,10 +1,7 @@
-window.App = window.App || {};
-window.Lib = window.Lib || {};
-
 /*************************
  * Container View Model
  ************************/
-(function (lib) {
+(function (lib, undefined) {
   function Container(containername) {
     // properties
     this.name = containername || '';
@@ -47,18 +44,17 @@ window.Lib = window.Lib || {};
 
   lib.ContainerViewModel = Container;
 
-}(Lib));
+}(window.Lib = window.Lib || {}));
 
 /*************
  * Box Model
  ************/
-(function (lib) {
+(function (lib, undefined) {
   function Box(boxname) {
     this.name = boxname || '';
   }
 
   lib.BoxModel = Box;
 
-}(Lib));
+}(window.Lib = window.Lib || {}));
 
-//ko.applyBindings(new Container('Testing Container'));
