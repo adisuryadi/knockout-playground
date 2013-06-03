@@ -15,7 +15,7 @@
   }
 
   Container.prototype.addNewBox = function () {
-    var newBox = new lib.BoxModel();
+    var newBox = new lib.Box();
     this.selectedBox(newBox);
     return newBox;
   };
@@ -35,11 +35,11 @@
       throw new Error( {name: "NoBoxSelected", value: "no box selected"} );
     }
 
-    if (this.boxCollection().indexOf(selectedBox) < 0) {
+    if (this.boxCollection().indexOf(selectedBox) < 0 && selectedBox.valid()) {
       this.boxCollection.push(selectedBox);
-    }
+      this.selectedBox(null);
+    } 
 
-    this.selectedBox(null);
   };
 
   lib.ContainerViewModel = Container;
@@ -51,10 +51,42 @@
  ************/
 (function (lib, undefined) {
   function Box(boxname) {
-    this.name = boxname || '';
+    var self = this;
+    boxname = typeof boxname !== "undefined" ? boxname : '';
+    this.name = ko.observable(boxname);
+    this.description = '';
+    this.errors = ko.observableArray();
+    this.errorsString = ko.computed(function () {
+      return self.errors().join();
+    });
   }
 
-  lib.BoxModel = Box;
+  Box.prototype.valid = function () {
+    this.errors([]);
+
+    if (! this.name().replace(/^\s+|\s+$/g,'')) {
+      this.errors.push('Name is a required field');
+    }
+
+    if (this.errors().length) {
+      return false;
+    } else {
+      this.errors([]);
+    }
+
+    return true;
+  };
+
+  lib.Box = Box;
 
 }(window.Lib = window.Lib || {}));
 
+$(document).ready(function () {
+  $(document).on('click', '.box-save', function (e) {
+    var context = ko.contextFor(this); //this is the element that was clicked
+    if (context) {
+      context.$root.doneEditingBox(context.$data);
+    }
+  });
+  ko.applyBindings(new Lib.ContainerViewModel('My Container #1'));
+});

@@ -30,7 +30,7 @@ describe('Container', function() {
     });
 
     it('should return a box model instance', function() {
-      expect(this.newBox.constructor).toBe(Lib.BoxModel);
+      expect(this.newBox.constructor).toBe(Lib.Box);
     });
 
     it('should set the new box model to the selected box property', function() {
@@ -38,8 +38,12 @@ describe('Container', function() {
       expect(selectedBox).toBe(this.newBox);
     });
 
-    describe('then doneEditing', function() {
+    describe('then done editing with valid box', function() {
      
+      beforeEach(function () {
+        this.newBox.name('New Box'); // Give name so it valid
+      });
+      
       it('should add the new box to the container\'s box collection', function() {
         var boxCollection = this.container.boxCollection();
         this.container.doneEditingBox();
@@ -53,6 +57,29 @@ describe('Container', function() {
 
     });
 
+    describe('then done editing with not valid box', function() {
+      var boxCollection, selectedBox;
+
+      beforeEach(function() {
+        boxCollection = this.container.boxCollection();
+        selectedBox = this.container.selectedBox();
+      });
+
+      // TODO need cancel commit state
+      xit('should not add the new box to the container\'s box collection', function() {
+        selectedBox.name(''); // empty string is not valid box name
+        this.container.doneEditingBox();
+        expect(boxCollection.indexOf(this.newBox)).toBe(-1);
+      });
+
+      it('should persist the selected box', function() {
+        selectedBox.name(''); // empty string is not valid box name
+        this.container.doneEditingBox();
+        expect(this.container.selectedBox()).toBe(this.newBox);
+      });
+
+    });
+
   });
 
 
@@ -61,11 +88,11 @@ describe('Container', function() {
     beforeEach(function() {
       this.container = new Lib.ContainerViewModel();
       this.box1 = this.container.addNewBox();
-      this.box1.name = 'box1';
+      this.box1.name('box1');
       this.container.doneEditingBox();
       
       this.box2 = this.container.addNewBox();
-      this.box2.name = 'box2';
+      this.box2.name('box2');
       this.container.doneEditingBox();
     });
 
@@ -74,7 +101,11 @@ describe('Container', function() {
       expect(this.container.selectedBox()).toBe(this.box1); 
     });
 
-    describe('then doneEditing', function() {
+    xdescribe('then cancel the edit process', function() {
+         
+    });
+
+    xdescribe('then done editing', function() {
       
       beforeEach(function() {
         var editedBox = this.container.editBox(this.box1);
@@ -90,7 +121,7 @@ describe('Container', function() {
 
   });
 
-  describe('doneEditing', function() {
+  describe('done editing', function() {
       
     it('should throw exception if selected box is empty', function() {
       var container = new Lib.ContainerViewModel();
@@ -104,17 +135,37 @@ describe('Container', function() {
 describe('Box', function() {
   
   describe("when it's created", function() {
-    
+    var boxFactory;
+
+    beforeEach(function() {
+      boxFactory = {
+        name: 'Box #1'
+      };
+
+      this.box = new Lib.Box();
+    });
+
     it('should be able to explicitly given a name', function() {
-      var box = new Lib.BoxModel('box #1');
-      expect(box.name).toBe('box #1');
+      var box = new Lib.Box('box #1');
+      expect(box.name()).toBe('box #1');
     });
 
     it('should have empty string as default name', function() {
-      var box = new Lib.BoxModel();
-      expect(box.name).toBe('');
+      this.box.name('');
+      expect(this.box.name()).toBe('');
     });
-    
+   
+    it("should not valid if don't have name", function() {
+      this.box.name('');
+      expect(this.box.valid()).toBeFalsy();
+      expect(this.box.errors.indexOf('Name is a required field')).not.toBeLessThan(0);
+    });
+
+    it('should not valid if only whitespaces', function() {
+      this.box.name('      ');  
+      expect(this.box.valid()).toBeFalsy();
+      expect(this.box.errors.indexOf('Name is a required field')).not.toBeLessThan(0);
+    });
   });
 
 });

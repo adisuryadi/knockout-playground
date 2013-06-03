@@ -1,6 +1,7 @@
 {
   "framework": "jasmine",
   "src_files": [
+    "js/vendor/jquery.js",
     "js/vendor/knockout.js",
     "js/vendor/knockout.validation.js",
     "js/vendor/knockout.mapping.js",
