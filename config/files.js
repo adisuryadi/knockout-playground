@@ -21,6 +21,13 @@ module.exports = require(process.env['LINEMAN_MAIN']).config.extend('files', {
     ],
     app: [
       "app/js/main.js"
-    ]
+    ],
+    less: {
+      compile: {
+        options: {
+          paths: ["vendor/css/bootstrap.min.css", "vendor/css/**/*.css", "app/css/**/*.less"]
+        }
+      }
+    }
   }
 });
