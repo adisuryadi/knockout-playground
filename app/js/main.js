@@ -81,12 +81,39 @@
 
 }(window.Lib = window.Lib || {}));
 
-$(document).ready(function () {
-  $(document).on('click', '.box-save', function (e) {
-    var context = ko.contextFor(this); //this is the element that was clicked
-    if (context) {
-      context.$root.doneEditingBox(context.$data);
-    }
-  });
-  ko.applyBindings(new Lib.ContainerViewModel('My Container #1'));
-});
+(function() {
+  window.generateInitialContent = function() {
+    var html;
+
+    html = JST['app/templates/main.us']();
+    document.body.innerHTML += html;
+
+    window.vm = new Lib.ContainerViewModel('My Container #1');
+    window.setupEvents();
+    ko.applyBindings(window.vm);
+
+  };
+
+  window.setupEvents = function () {
+    $(document).on('click', '.box-save', function (e) {
+      var context = ko.contextFor(this); //this is the element that was clicked
+      if (context) {
+        context.$root.doneEditingBox(context.$data);
+      }
+    });
+
+    $(document).on('click', '#cfb_start_add_box', function (e) {
+      var context = ko.contextFor(this); //this is the element that was clicked
+      if (context) {
+        context.$root.addNewBox(context.$data);
+      }
+    });
+  };
+
+  if (window.addEventListener) {
+    window.addEventListener('DOMContentLoaded', generateInitialContent, false);
+  } else {
+    window.attachEvent('load', generateInitialContent);
+  }
+
+}).call(this);

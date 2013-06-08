@@ -1,0 +1,27 @@
+<fieldset id="cfb">
+  <legend>Container</legend>
+  <label for="cfb_name">Name: </label>
+  <input type="text" id="container_for_boxes_name" data-bind="value: name">
+
+  <a href="javascript:void(0);" id="cfb_start_add_box" data-bind="visible: selectedBox() == null">Add Box</a>
+
+  <ul id="cfb_collection" data-bind="foreach: boxCollection">
+    <li class="item-box">
+      <h3 data-bind="text: name"></h3>
+      <p data-bind="text: description"></p>
+    </li>
+  </ul>
+
+  <div data-bind="with: selectedBox()">
+    <div class="error-message" data-bind="text: errorsString"></div>
+    <fieldset class="item-box">
+      <legend>Box</legend>
+      <label for="box_name">Name: *</label>
+      <input type="text" id="box_name" data-bind="value: name">
+      <label for="box_description">Description</label>
+      <textarea name="box_description" id="box_description" cols="30" rows="10" data-bind="value: description"></textarea>
+      <input type="submit" value="Save" class="box-save">
+    </fieldset>
+  </div>
+
+</fieldset>
