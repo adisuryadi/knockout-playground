@@ -8,7 +8,7 @@
     "company": "hungmac.com"
   },
   "dependencies": {
-    "lineman": "~0.7.1"
+    "lineman": "~0.8.0"
   },
   "engines": {
     "node": "~>0.10.5",
