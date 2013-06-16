@@ -24,7 +24,7 @@ module.exports = require(process.env['LINEMAN_MAIN']).config.extend 'application
 
   spec:
     options:
-      growl: true
+      growl: false
 
   editor:
     template: "<%= files.template.editor %>"

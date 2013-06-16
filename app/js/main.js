@@ -2,7 +2,7 @@
  * Container View Model
  ************************/
 (function (lib, undefined) {
-  function Container(containername) {
+  function ContainerViewModel(containername) {
     // properties
     this.name = containername || '';
     this.boxCollection = ko.observableArray();
@@ -10,39 +10,36 @@
 
     // subscription
     this.boxCollection.subscribe(function (newValue) {
-      
+
     });
   }
 
-  Container.prototype.addNewBox = function () {
-    var newBox = new lib.Box();
-    this.selectedBox(newBox);
-    return newBox;
-  };
-
-  Container.prototype.editBox = function (requestedBox) {
-    if (this.boxCollection().indexOf(requestedBox) >= 0) {
-      this.selectedBox(requestedBox);
-      return requestedBox;
+  ko.utils.extend(ContainerViewModel.prototype, {
+    addNewBox: function () {
+      var newBox = new lib.Box();
+      this.selectedBox(newBox);
+      return newBox;
+    },
+    editBox: function (requestedBox) {
+      if (this.boxCollection().indexOf(requestedBox) >= 0) {
+        this.selectedBox(requestedBox);
+        return requestedBox;
+      }
+      return false;
+    },
+    doneEditingBox: function () {
+      var selectedBox = this.selectedBox();
+      if (! selectedBox) {
+        throw new Error( {name: "NoBoxSelected", value: "no box selected"} );
+      }
+      if (this.boxCollection().indexOf(selectedBox) < 0 && selectedBox.valid()) {
+        this.boxCollection.push(selectedBox);
+        this.selectedBox(null);
+      }
     }
-    return false;
-  };
+  });
 
-  Container.prototype.doneEditingBox = function () {
-    var selectedBox = this.selectedBox();
-
-    if (! selectedBox) {
-      throw new Error( {name: "NoBoxSelected", value: "no box selected"} );
-    }
-
-    if (this.boxCollection().indexOf(selectedBox) < 0 && selectedBox.valid()) {
-      this.boxCollection.push(selectedBox);
-      this.selectedBox(null);
-    } 
-
-  };
-
-  lib.ContainerViewModel = Container;
+  lib.ContainerViewModel = ContainerViewModel;
 
 }(window.Lib = window.Lib || {}));
 
